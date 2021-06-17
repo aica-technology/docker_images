@@ -27,6 +27,7 @@ RUN apt update && apt install -y \
   ssh \
   sudo \
   unzip \
+  ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
   && rm -rf /var/lib/apt/lists/*
 
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
@@ -76,9 +77,8 @@ RUN echo "session required pam_limits.so" | sudo tee --append /etc/pam.d/common-
 
 WORKDIR ${HOME}
 
-# disable shared memory for container isolation
-COPY config/fastrtps-profile.xml ${HOME}/.fastrtps-profile.xml
-ENV FASTRTPS_DEFAULT_PROFILES_FILE ${HOME}/.fastrtps-profile.xml
+# select dds
+ENV RMW_IMPLEMENTATION rmw_cyclonedds_cpp
 
 # Clean image
 RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
