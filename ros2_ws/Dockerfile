@@ -76,6 +76,10 @@ RUN echo "session required pam_limits.so" | sudo tee --append /etc/pam.d/common-
 
 WORKDIR ${HOME}
 
+# disable shared memory for container isolation
+COPY config/fastrtps-profile.xml ${HOME}/.fastrtps-profile.xml
+ENV FASTRTPS_DEFAULT_PROFILES_FILE ${HOME}/.fastrtps-profile.xml
+
 # Clean image
 RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
